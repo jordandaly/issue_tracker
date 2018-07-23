@@ -4,7 +4,7 @@
         <h1>{{ issue.title }}</h1>
         <p>{{ issue.description }}</p>
         {% if issue.image %}
-        <img class="materialboxed" src="{{ issue.image }}" alt="Issue Image" style="width:100%;height:450px;">
+        <img class="materialboxed" src="/media/{{ issue.image }}" alt="Issue Image" style="width:100%;height:450px;">
         {% endif %}
         <div class="col s12 m6">
             <p><b>Created: </b>{{ issue.created_date }}</p>
