@@ -1,0 +1,27 @@
+{% extends 'base.html'%} {% block content %}
+<div class="card-panel blue-grey lighten-5">
+    <div class="row">
+        <h1>{{ issue.title }}</h1>
+        <p>{{ issue.description }}</p>
+        {% if issue.image %}
+        <img class="materialboxed" src="{{ issue.image }}" alt="Issue Image" style="width:100%;height:450px;">
+        {% endif %}
+        <div class="col s12 m6">
+            <p><b>Created: </b>{{ issue.created_date }}</p>
+            <p><b>Tag: </b>{{ issue.tag }}</p>
+            <p><b>Status: </b>{{ issue.status }}</p>
+            <p><b>Type: </b>{{ issue.issue_type }}</p>
+            <p><b>Logged by: </b>{{ issue.author }}</p>
+        </div>
+        <div class="col s12 m6">
+            <p><b>Upvotes: </b>{{ issue.upvotes }}</p>
+            <p><b>Assigned to: </b>{{ issue.assignee }}</p>
+            <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
+            <p><b>Resolved: </b>{{ issue.id_resolved }}</p>
+        </div>
+    </div>
+    
+    <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a> 
+
+</div>
+{% endblock %}

@@ -34,6 +34,7 @@ def create_or_edit_issue(request, pk=None):
     if request.method == "POST":
         form = IssueForm(request.POST, request.FILES, instance=issue)
         if form.is_valid():
+            form.instance.author = request.user
             issue = form.save()
             return redirect(issue_detail, issue.pk)
     else:

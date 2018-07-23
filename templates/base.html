@@ -1,0 +1,45 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
+    {% include 'material/includes/material_css.html' %}
+    <link type="text/css" rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="nav-wrapper">
+              <a href="{% url 'get_issues' %}" class="brand-logo"><i class="material-icons right">build</i>Daly Issue Tracker</a>
+              <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+              <ul class="right hide-on-med-and-down">
+                <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
+              </ul>
+            </div>
+          </nav>
+        
+          <ul class="sidenav" id="mobile-demo">
+            <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
+          </ul>
+    </header>
+    <div class="container">
+        {% block content %} {% endblock %}
+    </div>
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
+    {% include 'material/includes/material_js.html' %}
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+
+</html>
