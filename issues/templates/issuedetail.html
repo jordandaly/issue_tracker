@@ -19,24 +19,29 @@
             <p><b>Assigned to: </b>{{ issue.assignee }}</p>
             <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
             <p><b>Resolved: </b>{{ issue.is_resolved }}</p>
+            <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
         </div>
     </div>
     
-    <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
+    
 
         <div class="col s12 m6">
             <h3>Comments</h3>
             {% for comment in comments %}
             <div class="card-panel blue-grey lighten-5">
-            <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
-            <p><b>Comment: </b>{{ comment.comment }}</p>
-            <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+            <div class="row">
+                <div class="col s12 m8">
+                    <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
+                    <p><b>Comment: </b>{{ comment.comment }}</p>
+                </div>
+                <div class="col s12 m4"></div>
+                    <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+                </div>
+            </div>
             </div>
             {% endfor %}
-
+            <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
         </div>
-
-        <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
 
 
 </div>

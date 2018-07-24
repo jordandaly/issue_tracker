@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <form method="get">
+    {{ filter.form.as_p }}
+    <button class="btn waves-effect waves-light"  type="submit"><i class="material-icons right">search</i>Filter</button>
+  </form>
+
+  <div class="row">
+        <p>{{ issue_count }}</p>
+        <ul class="collapsible">
+        {% for issue in filter.qs %}
+            <li>
+                 
+            <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ issue.title }} <a href="{% url 'issue_detail' issue.id %}"><i class="material-icons">navigate_next</i></a>
+            </div>
+            <div class="collapsible-body">
+                <p><span><b>Created: </b>{{ issue.created_date }}</span></p>
+                <p><span><b>Tag: </b>{{ issue.tag }}</span></p>
+                <p><span><b>Upvotes: </b>{{ issue.upvotes }}</span></p>
+                <p><span><b>Status: </b>{{ issue.status }}</span></p>
+                <p><span><b>Type: </b>{{ issue.issue_type }}</span></p>
+                <p><span><b>Logged by: </b>{{ issue.author }}</span></p>
+                <p><span><b>Assigned to: </b>{{ issue.assignee }}</span></p>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
+from .filters import IssueFilter
 
 def get_issues(request):
     """
@@ -11,6 +12,11 @@ def get_issues(request):
     
     issues = Issue.objects.all().order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+def search(request):
+    issue_list = Issue.objects.all()
+    issue_filter = IssueFilter(request.GET, queryset=issue_list)
+    return render(request, 'search_issues.html', {'filter': issue_filter})
 
 def issue_detail(request, pk):
     """
