@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^(?P<issue_pk>\d+)/new/$', create_or_edit_comment, name='new_comment'),
     url(r'^(?P<issue_pk>\d+)/(?P<pk>\d+)/edit/$', create_or_edit_comment, name='edit_comment'),
     url(r'^search/$', search, name='search'),
-    url(r'^get_issues_json/$', get_issues_json, name='get_issues_json'),
+    url(r'^report/get_issues_json/$', get_issues_json, name='get_issues_json'),
     url(r'^report/$', report, name='report')
     ]

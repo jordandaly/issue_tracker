@@ -22,6 +22,7 @@
             <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
         </div>
     </div>
+
     
     
 
@@ -38,11 +39,11 @@
                     <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
                 </div>
             </div>
-            </div>
+
             {% endfor %}
             <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
+            </div>
         </div>
-
 
 </div>
 {% endblock %}

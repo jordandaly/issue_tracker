@@ -1,5 +1,5 @@
 d3.queue()
-    .defer(d3.json, "/get_issues_json")
+    .defer(d3.json, "get_issues_json/")
     .await(makeGraphs);
 
 

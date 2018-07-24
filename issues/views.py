@@ -31,10 +31,11 @@ def get_issues_json(request):
             'issue_type': i.issue_type,
             'status': i.status,
             'upvotes': i.upvotes,
-            'author': i.author.username,
-            'assignee': i.assignee.username
+            'author': i.author.username
+            # 'assignee': i.assignee.username
         })
     return JsonResponse(issues, safe=False)
+
 
 def search(request):
     issue_list = Issue.objects.all()
