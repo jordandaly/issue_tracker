@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load material_form %}
+{% block content %}
+    <h1>Create/Update Comment</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {% form form=form %}{% endform %}
+        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Comment Saved!'})">Save Comment
+                <i class="material-icons right">send</i>
+              </button>
+    </form>
+{% endblock %}

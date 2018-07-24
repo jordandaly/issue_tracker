@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from .models import Issue
-from .forms import IssueForm
+from .models import Issue, Comment
+from .forms import IssueForm, CommentForm
 
 def get_issues(request):
     """
@@ -22,7 +22,8 @@ def issue_detail(request, pk):
     """
     issue = get_object_or_404(Issue, pk=pk)
     issue.save()
-    return render(request, "issuedetail.html", {'issue': issue})
+    comments = Comment.objects.filter(issue=pk)
+    return render(request, "issuedetail.html", {'issue': issue, 'comments': comments})
 
 def create_or_edit_issue(request, pk=None):
     """
@@ -40,3 +41,23 @@ def create_or_edit_issue(request, pk=None):
     else:
         form = IssueForm(instance=issue)
     return render(request, 'issueform.html', {'form': form})
+
+
+def create_or_edit_comment(request, issue_pk, pk=None):
+    """
+    Create a view that allows us to create
+    or edit a comment depending if the Comment ID
+    is null or not
+    """
+    issue = get_object_or_404(Issue, pk=issue_pk)
+    comment = get_object_or_404(Comment, pk=pk) if pk else None
+    if request.method == "POST":
+        form = CommentForm(request.POST, request.FILES, instance=comment)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.issue = issue
+            comment = form.save()
+            return redirect(issue_detail, issue_pk)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'commentform.html', {'form': form})
