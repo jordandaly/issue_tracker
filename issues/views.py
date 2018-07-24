@@ -3,6 +3,12 @@ from django.utils import timezone
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
 from .filters import IssueFilter
+from django.http import JsonResponse
+from django.core import serializers
+
+def report(request):
+    return render(request, "report.html")
+
 
 def get_issues(request):
     """
@@ -12,6 +18,23 @@ def get_issues(request):
     
     issues = Issue.objects.all().order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+
+def get_issues_json(request):
+    issues = []
+    for i in Issue.objects.all():
+        issues.append({
+            'title': i.title,
+            'description': i.description,
+            'tag': i.tag,
+            'resolved_date': i.resolved_date,
+            'issue_type': i.issue_type,
+            'status': i.status,
+            'upvotes': i.upvotes,
+            'author': i.author.username,
+            'assignee': i.assignee.username
+        })
+    return JsonResponse(issues, safe=False)
 
 def search(request):
     issue_list = Issue.objects.all()
@@ -67,3 +90,5 @@ def create_or_edit_comment(request, issue_pk, pk=None):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'commentform.html', {'form': form})
+
+
