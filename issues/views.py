@@ -4,6 +4,7 @@ from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
 from .filters import IssueFilter
 from django.http import JsonResponse
+from django.db.models import Count
 from django.core import serializers
 
 def report(request):
@@ -20,21 +21,75 @@ def get_issues(request):
     return render(request, "issues.html", {'issues': issues})
 
 
-def get_issues_json(request):
-    issues = []
-    for i in Issue.objects.all():
-        issues.append({
-            'title': i.title,
-            'description': i.description,
-            'tag': i.tag,
-            'resolved_date': i.resolved_date,
-            'issue_type': i.issue_type,
-            'status': i.status,
-            'upvotes': i.upvotes,
-            'author': i.author.username
-            # 'assignee': i.assignee.username
-        })
-    return JsonResponse(issues, safe=False)
+def get_issue_type_json(request):
+    # issues = []
+    # for i in Issue.objects.all():
+    #     issues.append({
+    #         'title': i.title,
+    #         'description': i.description,
+    #         'tag': i.tag,
+    #         'resolved_date': i.resolved_date,
+    #         'issue_type': i.issue_type,
+    #         'status': i.status,
+    #         'upvotes': i.upvotes,
+    #         'author': i.author.username
+    #         # 'assignee': i.assignee.username
+    #     })
+    # return JsonResponse(issues, safe=False)
+    dataset = Issue.objects \
+        .values('issue_type') \
+        .exclude(issue_type='') \
+        .annotate(total=Count('issue_type')) \
+        .order_by('issue_type')
+
+    chart = {
+        'chart': {'type': 'column'},
+        'title': {'text': 'Issue Type'},
+        'xAxis': {'type': "category"},
+        'series': [{
+            'name': 'Issue Type',
+            'data': list(map(lambda row: {'name': [row['issue_type']], 'y': row['total']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+
+def get_status_json(request):
+    dataset = Issue.objects \
+        .values('status') \
+        .exclude(status='') \
+        .annotate(total=Count('status')) \
+        .order_by('status')
+
+    chart = {
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Issue Status'},
+        'series': [{
+            'name': 'Issue Status',
+            'data': list(map(lambda row: {'name': [row['status']], 'y': row['total']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+
+def get_upvotes_json(request):
+    dataset = Issue.objects \
+        .values('upvotes', 'title') \
+        .order_by('upvotes')
+
+    chart = {
+        'chart': {'type': 'bar'},
+        'title': {'text': 'Issue Upvotes'},
+        'yAxis': {'type': "category"},
+        'series': [{
+            'name': 'Issue Upvotes',
+            'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
 
 
 def search(request):

@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='issues/')),
     url(r'issues/', include('issues.urls')),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    # url(r'^djangojs/', include('djangojs.urls')),
 ]
 

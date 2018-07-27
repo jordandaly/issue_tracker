@@ -4,20 +4,23 @@
 <html>
 
 <head>
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
     {% include 'material/includes/material_css.html' %}
-    <link type="text/css" rel="stylesheet" href="{% static 'css/dc.min.css' %}"  media="screen,projection"/>
+    <!--<link type="text/css" rel="stylesheet" href="{% static 'css/dc.min.css' %}"  media="screen,projection"/>-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/custom.css' %}"/>
     
 
-    <script type="text/javascript" src="{% static 'js/d3.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/crossfilter.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/dc.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/d3-queue.min.js' %}"></script>
-    <script src="{% static 'js/graph.js' %}"></script>
+    <!--<script type="text/javascript" src="{% static 'js/d3.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/crossfilter.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/dc.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/d3-queue.min.js' %}"></script>-->
+    <!--<script src="{% static 'js/graph.js' %}"></script>-->
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -49,7 +52,7 @@
         {% block content %} {% endblock %}
     </div>
     <!--JavaScript at end of body for optimized loading-->
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
     {% include 'material/includes/material_js.html' %}
     <script src="{% static 'js/script.js' %}"></script>
