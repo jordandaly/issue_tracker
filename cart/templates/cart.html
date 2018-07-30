@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static from staticfiles %}
-
+{% load material_form %}
 {% block content %}
 <div class="row">
     {% for item in cart_items %}
@@ -25,7 +25,7 @@
                             <div>{{item.quantity}}</div>
                         </div>
                     </div>
-                    <button type="submit"><span aria-hidden="true"></span>Amend</button>
+                    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Cart Amended!'})">Amend
                 </form>
             </p>
         </div>

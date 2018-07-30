@@ -1,4 +1,6 @@
-{% extends 'base.html'%} {% block content %}
+{% extends 'base.html'%}
+{% load material_form %}
+{% block content %}
 <div class="card-panel blue-grey lighten-5">
     <div class="row">
         <h1>{{ issue.title }}</h1>
@@ -29,10 +31,9 @@
         {% csrf_token %}
         <div class="input-group">
             <input name='quantity' type="number" min="1" max="99" class="form-control" placeholder="Quantity">
-            <span><button type="submit">Add to Cart</button></span>
+            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Added to Cart!'})">Add to Cart
+                </button>
         </div>
-        <!-- /input-group -->
-
     </form>
     {% endif %}
     

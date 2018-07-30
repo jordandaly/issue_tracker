@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load material_form %}
 {% load static from staticfiles %}
 
 {% block head_js %}
@@ -49,7 +50,7 @@
     
     {% csrf_token %}
     <div class="form-group">
-        <input id="submit_payment_btn" name="commit" type="submit" value="Submit Payment">
+        <button class="btn waves-effect waves-light" id="submit_payment_btn" name="commit" type="submit">Submit Payment</button>
     </div>
 </form>
 
