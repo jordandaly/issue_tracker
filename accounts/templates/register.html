@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    <form method="post" action="{% url 'register' %}" class="accountform">
+        <fieldset>
+            <legend>Create a new account</legend>
+            <p>Already got an account? <a href="{% url 'login' %}">Sign In</a></p>
+            {% csrf_token %}
+            {{ user_form }}
+            <button type="submit">Create account</button>
+        </fieldset>
+    </form>
+{% endblock %}
