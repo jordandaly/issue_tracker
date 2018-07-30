@@ -13,7 +13,9 @@
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    {% block head_js %}
+    {% endblock head_js %}
 </head>
 
 <body>
@@ -57,7 +59,7 @@
         {% block content %} {% endblock %}
     </div>
     <!--JavaScript at end of body for optimized loading-->
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
     {% include 'material/includes/material_js.html' %}
     <script src="{% static 'js/script.js' %}"></script>

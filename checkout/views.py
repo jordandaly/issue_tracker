@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import MakePaymentForm, OrderForm
-from .models import OrderLineItem
+from .models import Order, OrderLineItem
 from django.conf import settings
 from django.utils import timezone
 from issues.models import Issue
+from issues.views import get_issues
 import stripe
 
 
@@ -27,11 +28,11 @@ def checkout(request):
             cart = request.session.get('cart', {})
             total = 0
             for id, quantity in cart.items():
-                product = get_object_or_404(Product, pk=id)
-                total += quantity * product.price
+                issue = get_object_or_404(Issue, pk=id)
+                total += quantity * issue.price
                 order_line_item = OrderLineItem(
                     order = order, 
-                    product = product, 
+                    issue = issue, 
                     quantity = quantity
                     )
                 order_line_item.save()
@@ -49,7 +50,12 @@ def checkout(request):
             if customer.paid:
                 messages.error(request, "You have successfully paid")
                 request.session['cart'] = {}
-                return redirect(reverse('products'))
+                '''If customer has paid increase Issue Upvotes by quantity of items paid'''
+                
+                issue = Issue.objects.get(pk=id)
+                issue.upvotes += quantity
+                issue.save()
+                return redirect(reverse('get_issues'))
             else:
                 messages.error(request, "Unable to take payment")
         else:
