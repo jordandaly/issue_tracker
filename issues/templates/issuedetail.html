@@ -22,6 +22,19 @@
             <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
         </div>
     </div>
+
+    {% if issue.issue_type == "FEATURE" %}
+    <h5>Purchase Feature Upvotes</h5>
+    <form method="post" action="{% url 'add_to_cart' issue.id %}">
+        {% csrf_token %}
+        <div class="input-group">
+            <input name='quantity' type="number" min="1" max="99" class="form-control" placeholder="Quantity">
+            <span><button type="submit">Add to Cart</button></span>
+        </div>
+        <!-- /input-group -->
+
+    </form>
+    {% endif %}
     
     
 

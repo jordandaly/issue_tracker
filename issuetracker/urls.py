@@ -17,14 +17,22 @@ Including another URLconf
 
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import RedirectView
 from django.views.static import serve
+from accounts import urls as urls_accounts
+from issues import urls as urls_issues
+from cart import urls as urls_cart
+from checkout import urls as urls_checkout
+from issues.views import get_issues
 from .settings import MEDIA_ROOT
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', RedirectView.as_view(url='issues/')),
-    url(r'issues/', include('issues.urls')),
+    url(r'^$', get_issues, name='index'),
+    url(r'^issues/', include(urls_issues)),
+    url(r'^accounts/', include(urls_accounts)),
+    url(r'^cart/', include(urls_cart)),
+    url(r'^checkout/', include(urls_checkout)),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]
 

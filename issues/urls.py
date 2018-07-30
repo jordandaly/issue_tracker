@@ -8,5 +8,5 @@ urlpatterns = [
     url(r'^(?P<pk>\d+)/edit/$', create_or_edit_issue, name='edit_issue'),
     url(r'^(?P<issue_pk>\d+)/new/$', create_or_edit_comment, name='new_comment'),
     url(r'^(?P<issue_pk>\d+)/(?P<pk>\d+)/edit/$', create_or_edit_comment, name='edit_comment'),
-    url(r'^search/$', search, name='search')
+    url(r'^search/$', search, name='search'),
     ]
