@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
@@ -13,10 +13,12 @@ def get_issues(request):
     issues = Issue.objects.all().order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
 
+
 def search(request):
     issue_list = Issue.objects.all()
     issue_filter = IssueFilter(request.GET, queryset=issue_list)
     return render(request, 'search_issues.html', {'filter': issue_filter})
+
 
 def issue_detail(request, pk):
     """
@@ -30,6 +32,14 @@ def issue_detail(request, pk):
     issue.save()
     comments = Comment.objects.filter(issue=pk)
     return render(request, "issuedetail.html", {'issue': issue, 'comments': comments})
+
+
+def upvote(request, pk):
+    issue = Issue.objects.get(pk=pk)
+    issue.upvotes += 1
+    issue.save()
+    return redirect('issue_detail', pk)
+
 
 def create_or_edit_issue(request, pk=None):
     """
