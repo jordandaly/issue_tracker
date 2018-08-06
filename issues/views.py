@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
@@ -33,14 +34,14 @@ def issue_detail(request, pk):
     comments = Comment.objects.filter(issue=pk)
     return render(request, "issuedetail.html", {'issue': issue, 'comments': comments})
 
-
+@login_required()
 def upvote(request, pk):
     issue = Issue.objects.get(pk=pk)
     issue.upvotes += 1
     issue.save()
     return redirect('issue_detail', pk)
 
-
+@login_required()
 def create_or_edit_issue(request, pk=None):
     """
     Create a view that allows us to create
@@ -62,7 +63,7 @@ def create_or_edit_issue(request, pk=None):
         form = IssueForm(instance=issue)
     return render(request, 'issueform.html', {'form': form})
 
-
+@login_required()
 def create_or_edit_comment(request, issue_pk, pk=None):
     """
     Create a view that allows us to create
