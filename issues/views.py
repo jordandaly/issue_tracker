@@ -52,12 +52,28 @@ def create_or_edit_issue(request, pk=None):
     if request.method == "POST":
         form = IssueForm(request.POST, request.FILES, instance=issue)
         if form.is_valid():
-            form.instance.author = request.user
-            if form.instance.issue_type == 'FEATURE':
-                form.instance.price = 100
+            
+            ''' Begin reCAPTCHA validation '''
+            recaptcha_response = request.POST.get('g-recaptcha-response')
+            data = {
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+                'response': recaptcha_response
+            }
+            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+            result = r.json()
+            ''' End reCAPTCHA validation '''
+
+            if result['success']:
+                form.instance.author = request.user
+                if form.instance.issue_type == 'FEATURE':
+                    form.instance.price = 100
+                else:
+                    form.instance.price = 0
+                issue = form.save()
+                messages.success(request, 'New Issue added with success!')
             else:
-                form.instance.price = 0
-            issue = form.save()
+                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+            
             return redirect(issue_detail, issue.pk)
     else:
         form = IssueForm(instance=issue)
