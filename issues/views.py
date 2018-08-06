@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.conf import settings
+from django.contrib import messages
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
 from .filters import IssueFilter
 import os
+import requests
 
 def get_issues(request):
     """
@@ -56,9 +59,9 @@ def create_or_edit_issue(request, pk=None):
             
             ''' Begin reCAPTCHA validation '''
             recaptcha_response = request.POST.get('g-recaptcha-response')
-            GOOGLE_RECAPTCHA_SECRET_KEY = os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY")
+        
             data = {
-                'secret': GOOGLE_RECAPTCHA_SECRET_KEY,
+                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
                 'response': recaptcha_response
             }
             r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
