@@ -48,13 +48,14 @@ def checkout(request):
                 messages.error(request, "Your card was declined!")
                 
             if customer.paid:
-                messages.error(request, "You have successfully paid")
+                messages.success(request, "You have successfully paid")
+                '''If customer has paid increase each Issue Upvotes by quantity of items paid'''
+                for id, quantity in cart.items():
+                    issue = Issue.objects.get(pk=id)
+                    issue.upvotes += quantity
+                    issue.save()
+
                 request.session['cart'] = {}
-                '''If customer has paid increase Issue Upvotes by quantity of items paid'''
-                
-                issue = Issue.objects.get(pk=id)
-                issue.upvotes += quantity
-                issue.save()
                 return redirect(reverse('get_issues'))
             else:
                 messages.error(request, "Unable to take payment")
