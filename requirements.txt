@@ -8,6 +8,7 @@ django-filter==2.0.0
 django-material==1.2.5
 django-storages==1.6.6
 docutils==0.14
+gunicorn==19.9.0
 idna==2.7
 jmespath==0.9.3
 Pillow==5.2.0
