@@ -52,6 +52,10 @@ def create_or_edit_issue(request, pk=None):
         form = IssueForm(request.POST, request.FILES, instance=issue)
         if form.is_valid():
             form.instance.author = request.user
+            if form.instance.issue_type == 'FEATURE':
+                form.instance.price = 100
+            else:
+                form.instance.price = 0
             issue = form.save()
             return redirect(issue_detail, issue.pk)
     else:
