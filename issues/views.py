@@ -6,8 +6,14 @@ from django.contrib import messages
 from .models import Issue, Comment
 from .forms import IssueForm, CommentForm
 from .filters import IssueFilter
+from django.http import JsonResponse
+from django.db.models import Count
+from django.core import serializers
 import os
 import requests
+
+def report(request):
+    return render(request, "report.html")
 
 def get_issues(request):
     """
@@ -17,6 +23,62 @@ def get_issues(request):
     
     issues = Issue.objects.all().order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+def get_issue_type_json(request):
+    dataset = Issue.objects \
+        .values('issue_type') \
+        .exclude(issue_type='') \
+        .annotate(total=Count('issue_type')) \
+        .order_by('issue_type')
+
+    chart = {
+        'chart': {'type': 'column'},
+        'title': {'text': 'Issue Type'},
+        'xAxis': {'type': "category"},
+        'series': [{
+            'name': 'Issue Type',
+            'data': list(map(lambda row: {'name': [row['issue_type']], 'y': row['total']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+
+def get_status_json(request):
+    dataset = Issue.objects \
+        .values('status') \
+        .exclude(status='') \
+        .annotate(total=Count('status')) \
+        .order_by('status')
+
+    chart = {
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Issue Status'},
+        'series': [{
+            'name': 'Issue Status',
+            'data': list(map(lambda row: {'name': [row['status']], 'y': row['total']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+
+def get_upvotes_json(request):
+    dataset = Issue.objects \
+        .values('upvotes', 'title') \
+        .order_by('upvotes')
+
+    chart = {
+        'chart': {'type': 'bar'},
+        'title': {'text': 'Issue Upvotes'},
+        'yAxis': {'type': "category"},
+        'series': [{
+            'name': 'Issue Upvotes',
+            'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
 
 
 def search(request):
@@ -103,3 +165,5 @@ def create_or_edit_comment(request, issue_pk, pk=None):
     else:
         form = CommentForm(instance=comment)
     return render(request, 'commentform.html', {'form': form})
+
+

@@ -28,6 +28,7 @@
         </div>
     </div>
 
+
     {% if issue.issue_type == "FEATURE" %}
     <h5>Purchase Feature Upvotes</h5>
     <form method="post" action="{% url 'add_to_cart' issue.id %}">
@@ -59,7 +60,8 @@
 
             {% endfor %}
             <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
-
+            </div>
+        </div>
 
 
 </div>
