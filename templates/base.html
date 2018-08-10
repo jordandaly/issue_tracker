@@ -4,12 +4,23 @@
 <html>
 
 <head>
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
     {% include 'material/includes/material_css.html' %}
+    <!--<link type="text/css" rel="stylesheet" href="{% static 'css/dc.min.css' %}"  media="screen,projection"/>-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/custom.css' %}"/>
+    
+
+    <!--<script type="text/javascript" src="{% static 'js/d3.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/crossfilter.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/dc.min.js' %}"></script>-->
+    <!--<script type="text/javascript" src="{% static 'js/d3-queue.min.js' %}"></script>-->
+    <!--<script src="{% static 'js/graph.js' %}"></script>-->
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -27,13 +38,16 @@
               <ul class="right hide-on-med-and-down">
                 <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
                 <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
+                <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>
               </ul>
             </div>
           </nav>
         
           <ul class="sidenav" id="mobile-demo">
+            <li><a href="{% url 'get_issues' %}"><i class="material-icons left">list</i>Issues</a></li>
             <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
             <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
+            <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>
           </ul>
     </header>
     <div class="container">
@@ -59,7 +73,6 @@
         {% block content %} {% endblock %}
     </div>
     <!--JavaScript at end of body for optimized loading-->
-    
     <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
     {% include 'material/includes/material_js.html' %}
     <script src="{% static 'js/script.js' %}"></script>
