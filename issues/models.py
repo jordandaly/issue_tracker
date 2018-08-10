@@ -18,6 +18,7 @@ class Issue(models.Model):
     image = models.ImageField(upload_to='img', blank=True, null=True)
     author = models.ForeignKey(User,related_name='issue_author', on_delete=models.CASCADE)
     assignee = models.ForeignKey(User,related_name='issue_assignee', null=True, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
 
     # Encapsulation, we meet again.
     class Issue_Types(ChoiceEnum):

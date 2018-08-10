@@ -1,10 +1,12 @@
-{% extends 'base.html'%} {% block content %}
+{% extends 'base.html'%}
+{% load material_form %}
+{% block content %}
 <div class="card-panel blue-grey lighten-5">
     <div class="row">
         <h1>{{ issue.title }}</h1>
         <p>{{ issue.description }}</p>
         {% if issue.image %}
-        <img class="materialboxed" src="/media/{{ issue.image }}" alt="Issue Image" style="width:100%;height:450px;">
+        <img class="materialboxed" src="{{ MEDIA_URL }}{{ issue.image }}" alt="Issue Image" style="width:100%;height:450px;">
         {% endif %}
         <div class="col s12 m6">
             <p><b>Created: </b>{{ issue.created_date }}</p>
@@ -15,7 +17,10 @@
             <p><b>Logged by: </b>{{ issue.author }}</p>
         </div>
         <div class="col s12 m6">
-            <p><b>Upvotes: </b>{{ issue.upvotes }}</p>
+            <p><b>Upvotes: </b>{{ issue.upvotes }}
+                {% if issue.issue_type == "BUG" %}
+                <a class="btn-floating btn-small waves-effect waves-light teal" href="{% url 'upvote' issue.id %}"><i class="material-icons">arrow_upward</i></a>
+                {% endif %}</p>
             <p><b>Assigned to: </b>{{ issue.assignee }}</p>
             <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
             <p><b>Resolved: </b>{{ issue.is_resolved }}</p>
@@ -23,20 +28,33 @@
         </div>
     </div>
 
+
+    {% if issue.issue_type == "FEATURE" %}
+    <h5>Purchase Feature Upvotes</h5>
+    <form method="post" action="{% url 'add_to_cart' issue.id %}">
+        {% csrf_token %}
+        <div class="input-group">
+            <input name='quantity' type="number" min="1" max="99" class="form-control" placeholder="Quantity">
+            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Added to Cart!'})">Add to Cart
+                </button>
+        </div>
+    </form>
+    {% endif %}
     
     
 
-        <div class="col s12 m6">
+        <!--<div class="col s12 m6">-->
             <h3>Comments</h3>
             {% for comment in comments %}
             <div class="card-panel blue-grey lighten-5">
-            <div class="row">
-                <div class="col s12 m8">
-                    <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
-                    <p><b>Comment: </b>{{ comment.comment }}</p>
-                </div>
-                <div class="col s12 m4"></div>
-                    <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+                <div class="row">
+                    <div class="col s12 m8">
+                        <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
+                        <p><b>Comment: </b>{{ comment.comment }}</p>
+                    </div>
+                    <div class="col s12 m4">
+                        <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+                    </div>
                 </div>
             </div>
 
@@ -44,6 +62,7 @@
             <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
             </div>
         </div>
+
 
 </div>
 {% endblock %}

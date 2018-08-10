@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% load material_form %}
+{% block content %}
+<div class="row">
+    {% for item in cart_items %}
+    
+    <div>
+        
+        <div></div>
+        
+        <div class="caption">
+            <h3>{{ item.issue.title }}</h3>
+            <p class="issue-description">{{ item.issue.description }}</p>
+            <p>{{ item.issue.price }}</p>
+            <p>
+                
+                <form class="form-inline" method="post" action="{% url 'adjust_cart' item.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputAmount" class="sr-only">New Qty</label>
+                        <div class="input-group">
+                            <div>Qty</div>
+                            <input name="quantity" type="number" min="0" max="999" class="form-control">
+                            <div>{{item.quantity}}</div>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Cart Amended!'})">Amend
+                </form>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="row">
+    <p>Total</p>
+    <p><span aria-hidden="true"></span>{{ total }}</p>
+    <a href="{% url 'checkout' %}" role="button"><span aria-hidden="true"></span>Checkout</a>
+</div>
+
+{% endblock %}

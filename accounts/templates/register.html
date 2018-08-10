@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load material_form %}
+{% block content %}
+    <form method="post" action="{% url 'register' %}">
+        <fieldset>
+            <legend>Create a new account</legend>
+            <p>Already got an account? <a href="{% url 'login' %}">Sign In</a></p>
+            {% csrf_token %}
+            <!-- {{ user_form }} -->
+            {% form form=user_form %}{% endform %}
+            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Registration Successful!'})">Create Account
+                </button>
+        </fieldset>
+    </form>
+{% endblock %}

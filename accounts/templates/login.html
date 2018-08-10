@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load material_form %}
+{% block content %}
+    <form method="post" action="{% url 'login' %}?next={{ next }}">
+        <fieldset>
+            <legend>Login</legend>
+            {% csrf_token %}
+            <!-- {{ user_form }} -->
+            {% form form=user_form %}{% endform %}
+            
+            <p><a href="{% url 'password_reset' %}">Forgot my password</a></p>
+            <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Login Successful!'})">Login
+            </button>
+        </fieldset>
+    </form>
+{% endblock %}

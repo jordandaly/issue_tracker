@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from .views import get_issues, issue_detail, create_or_edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_upvotes_json, report
+from .views import get_issues, issue_detail, create_or_edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_upvotes_json, report, upvote
+
 
 urlpatterns = [
     url(r'^$', get_issues, name='get_issues'),
@@ -13,4 +14,5 @@ urlpatterns = [
     url(r'^report/get_status_json/$', get_status_json, name='get_status_json'),
     url(r'^report/get_upvotes_json/$', get_upvotes_json, name='get_upvotes_json'),
     url(r'^report/$', report, name='report')
+    url(r'^(?P<pk>\d+)/upvote/$', upvote, name='upvote'),
     ]
