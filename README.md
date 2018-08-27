@@ -14,10 +14,16 @@ This is a web application that allow users to create issues, comment on issues, 
 Issues come in two varieties – ‘bugs’ (fix for free), and ‘features’ (only develop if offered enough money). To help prioritize the work, users are able to upvote bugs (signifying ‘I have this too’), and upvote feature requests (signifying ‘I want to have this too’).
 While upvoting bugs is free, to upvote a feature request, users need to pay some money to pay for development time in working on it.
 It is a full stack web application (frontend and backend) that provides CRUD (Create, Read, Update, Delete) functionality to a database hosted in the cloud on Heroku platform as a service. Users can :
-1.	View a list of issues and filter the list
-2.	Add a new issue and add comments to an issue
-3.	Upvote bugs for free and Upvote Features by adding the desired quantity of upvotes of an issue to the cart and using the checkout functionality to submit a payment
-4.	Edit an Issue, Comment and Cart
+1.	View list of all Issues sorted by newest descending
+2.  Filter Issues by Issue Type, Status, isResolved, Tag, Author and Assignee
+3.	Add New Issue
+4.  Add New Comment to an issue
+5.	Upvote Bugs for free
+6.  Upvote Features by adding the desired quantity of upvotes of an issue to the cart and using the checkout functionality to submit a payment
+7.	Edit an Issue, Comment and Cart
+8.  View list of Issues created by current logged in user (My Issues)
+9.  View list of notifications that are generated when the user's Issues are updated, upvoted or have a comment added (My Updates)
+10. View dashboard showing how many issues have been resolved today, in the past 7 days and in the past 28 days and charts for Issue Type, Issue Status and Issue Upvotes
 
 ### Features Left to Implement
 
@@ -30,7 +36,7 @@ A demo of this web application is available [here](https://daly-issue-tracker.he
 
 1. Clone the repo and cd into the project directory.
 2. Ensure you have Python 3 and Postgres installed and create a virtual environment and activate it.
-3. Install dependencies: `pip install -r requirements.txt`.
+3. Install dependencies: `pip3 install -r requirements.txt`.
 
 
 ## Technologies Used
@@ -49,10 +55,10 @@ Manual testing was undertaken for this application and satisfactorily passed. A 
 
 ## Deployment
 1. Make sure requirements.txt and Procfile exist
-⋅⋅*pip3 freeze --local requirements.txt
-⋅⋅*echo web: python app.py > Procfile
+`pip3 freeze --local requirements.txt`
+`echo web: python app.py > Procfile`
 2. Create Heroku App, Select Postgres add-on, download Heroku CLI toolbelt, login to heroku (Heroku login), git init, connect git to heroku (heroku git remote -a <project>), git add ., git commit, git push heroku master.
-3. heroku ps:scale web=1
+3. `heroku ps:scale web=1`
 4. In heroku app settings set the config vars to add DATABASE_URL, STRIPE API key and secret, AWS key and secret
 
 ## Credits
