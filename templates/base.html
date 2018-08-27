@@ -1,5 +1,5 @@
 {% load static from staticfiles %}
-
+{% load notifications_tags %}
 <!DOCTYPE html>
 <html>
 
@@ -21,10 +21,11 @@
     <!--<script src="{% static 'js/graph.js' %}"></script>-->
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+    {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
 
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
     {% block head_js %}
     {% endblock head_js %}
 </head>

@@ -12,6 +12,9 @@ from django.core import serializers
 import os
 import requests
 from datetime import datetime, timedelta, time
+from notifications.signals import notify
+from notifications.models import Notification
+
 
 
 def report(request):
@@ -50,6 +53,17 @@ def my_issues(request):
     user = request.user.id
     issues = Issue.objects.filter(author=user).order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+
+def my_notifications(request):
+    """
+    Create a view that will return a list
+    of notifications for the user to the 'notifications.html' template
+    """
+
+    user = request.user.id
+    notifications = Notification.objects.unread().filter(recipient=user).order_by('-timestamp')
+    return render(request, "notifications.html", {'notifications': notifications})
 
 
 def get_issue_type_json(request):
@@ -136,6 +150,7 @@ def upvote(request, pk):
     issue = Issue.objects.get(pk=pk)
     issue.upvotes += 1
     issue.save()
+    notify.send(request.user, recipient=issue.author, verb="upvoted your Issue: " + issue.title)
     return redirect('issue_detail', pk)
 
 
@@ -204,6 +219,7 @@ def edit_issue(request, pk=None):
             else:
                 form.instance.price = 0
             issue = form.save()
+            notify.send(request.user, recipient=issue.author, verb="updated your Issue: " + issue.title)
             messages.success(request, 'Issue Edited with success!')
 
             return redirect(issue_detail, issue.pk)
@@ -227,6 +243,7 @@ def create_or_edit_comment(request, issue_pk, pk=None):
             form.instance.author = request.user
             form.instance.issue = issue
             comment = form.save()
+            notify.send(request.user, recipient=issue.author, verb="added a comment to your Issue: " + issue.title)
             return redirect(issue_detail, issue_pk)
     else:
         form = CommentForm(instance=comment)

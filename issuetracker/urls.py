@@ -24,6 +24,7 @@ from cart import urls as urls_cart
 from checkout import urls as urls_checkout
 from issues.views import get_issues
 from .settings import MEDIA_ROOT
+import notifications.urls
 
 
 urlpatterns = [
@@ -34,6 +35,6 @@ urlpatterns = [
     url(r'^cart/', include(urls_cart)),
     url(r'^checkout/', include(urls_checkout)),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
-    # url(r'^djangojs/', include('djangojs.urls')),
+    url('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ]
 
