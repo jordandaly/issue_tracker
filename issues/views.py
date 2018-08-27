@@ -11,9 +11,25 @@ from django.db.models import Count
 from django.core import serializers
 import os
 import requests
+from datetime import datetime, timedelta, time
+
 
 def report(request):
-    return render(request, "report.html")
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
+    completed_daily = Issue.objects.filter(resolved_date__gte=today_start).filter(resolved_date__lt=today_end).count()
+
+    this_week_start = datetime.combine(today - timedelta(7), time())
+    completed_weekly = Issue.objects.filter(resolved_date__gte=this_week_start).filter(resolved_date__lt=today_end).count()
+
+    this_month_start = datetime.combine(today - timedelta(28), time())
+    completed_monthly = Issue.objects.filter(resolved_date__gte=this_month_start).filter(resolved_date__lt=today_end).count()
+    print(completed_daily)
+
+    return render(request, "report.html", {'completed_daily': str(completed_daily), 'completed_weekly': str(completed_weekly), 'completed_monthly': str(completed_monthly)})
+
 
 def get_issues(request):
     """
@@ -23,6 +39,18 @@ def get_issues(request):
     
     issues = Issue.objects.all().order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+
+@login_required()
+def my_issues(request):
+    """
+    Create a view that will return a list
+    of current user's Issues and render them to the 'issues.html' template
+    """
+    user = request.user.id
+    issues = Issue.objects.filter(author=user).order_by('-created_date')
+    return render(request, "issues.html", {'issues': issues})
+
 
 def get_issue_type_json(request):
     dataset = Issue.objects \
@@ -81,12 +109,14 @@ def get_upvotes_json(request):
     return JsonResponse(chart)
 
 
+@login_required()
 def search(request):
     issue_list = Issue.objects.all()
     issue_filter = IssueFilter(request.GET, queryset=issue_list)
     return render(request, 'search_issues.html', {'filter': issue_filter})
 
 
+@login_required()
 def issue_detail(request, pk):
     """
     Create a view that returns a single
@@ -100,6 +130,7 @@ def issue_detail(request, pk):
     comments = Comment.objects.filter(issue=pk)
     return render(request, "issuedetail.html", {'issue': issue, 'comments': comments})
 
+
 @login_required()
 def upvote(request, pk):
     issue = Issue.objects.get(pk=pk)
@@ -107,16 +138,15 @@ def upvote(request, pk):
     issue.save()
     return redirect('issue_detail', pk)
 
+
 @login_required()
-def create_or_edit_issue(request, pk=None):
+def create_issue(request):
     """
-    Create a view that allows us to create
-    or edit a issue depending if the Issue ID
+    Create a view that allows us to create an issue depending if the Issue ID
     is null or not
     """
-    issue = get_object_or_404(Issue, pk=pk) if pk else None
     if request.method == "POST":
-        form = IssueForm(request.POST, request.FILES, instance=issue)
+        form = IssueForm(request.POST, request.FILES)
         if form.is_valid():
             
             ''' Begin reCAPTCHA validation '''
@@ -143,8 +173,44 @@ def create_or_edit_issue(request, pk=None):
             
             return redirect(issue_detail, issue.pk)
     else:
+        form = IssueForm()
+    return render(request, 'issueform.html', {'form': form})
+
+
+@login_required()
+def edit_issue(request, pk=None):
+    """
+    Create a view that allows us to edit a issue depending if the Issue ID
+    is null or not
+    """
+    issue = get_object_or_404(Issue, pk=pk) if pk else None
+    user = request.user
+    # Prevents a non-staff user from editing another users comment
+    if not request.user.is_staff:
+        if user.id != request.user.id:
+            messages.success(
+                request,
+                'You Do Not Have Permission To Edit this Issue'
+            )
+            return redirect(issue_detail, issue.pk)
+
+    if request.method == "POST":
+        form = IssueForm(request.POST, request.FILES, instance=issue)
+        if form.is_valid():
+
+            form.instance.author = request.user
+            if form.instance.issue_type == 'FEATURE':
+                form.instance.price = 100
+            else:
+                form.instance.price = 0
+            issue = form.save()
+            messages.success(request, 'Issue Edited with success!')
+
+            return redirect(issue_detail, issue.pk)
+    else:
         form = IssueForm(instance=issue)
     return render(request, 'issueform.html', {'form': form})
+
 
 @login_required()
 def create_or_edit_comment(request, issue_pk, pk=None):
