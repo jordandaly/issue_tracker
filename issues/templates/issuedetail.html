@@ -31,8 +31,8 @@
             <p><b>Assigned to: </b>{{ issue.assignee }}</p>
             <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
             <p><b>Resolved: </b>{{ issue.is_resolved }}</p>
-            {% if user == issue.author or user.is_staff %}
             <a class="btn-floating btn-large waves-effect waves-light yellow" href="{% url 'save_issue' issue.id %}"><i class="material-icons">star</i></a>
+            {% if user == issue.author or user.is_staff %}
             <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
             {% endif %}
         </div>
@@ -74,7 +74,9 @@
                                     <p><b>Reply: </b>{{ reply.reply }}</p>
                                 </div>
                                 <div class="col s12 m4">
+                                    {% if user == reply.author or user.is_staff %}
                                     <a class="btn-floating btn-small waves-effect waves-light blue" href="{% url 'edit_reply' issue.id comment.id reply.id %}"><i class="material-icons left">edit</i>Edit Reply</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -83,7 +85,9 @@
                         {% endfor %}
                     </div>
                     <div class="col s12 m4">
+                        {% if user == comment.author or user.is_staff %}
                         <a class="btn-floating btn waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
