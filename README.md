@@ -24,6 +24,8 @@ It is a full stack web application (frontend and backend) that provides CRUD (Cr
 8.  View list of Issues created by current logged in user (My Issues)
 9.  View list of notifications that are generated when the user's Issues are updated, upvoted or have a comment added (My Updates)
 10. View dashboard showing how many issues have been resolved today, in the past 7 days and in the past 28 days and charts for Issue Type, Issue Status and Issue Upvotes
+11. Add Reply to Comment
+12. Save Issue and view list of Saved Issues
 
 ### Features Left to Implement
 
