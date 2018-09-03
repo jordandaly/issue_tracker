@@ -56,3 +56,31 @@ class Comment(models.Model):
 
         def __str__(self):
             return self.comment
+
+
+class Reply(models.Model):
+    """
+    A single reply
+    """
+    reply = models.CharField(max_length=200)
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, related_name='reply_author', on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, related_name='reply_comment', on_delete=models.CASCADE)
+
+    def __unicode__(self):
+        return self.reply
+
+    def __str__(self):
+        return self.reply
+
+
+class SavedIssue(models.Model):
+    """
+    A single SavedIssue
+    """
+    user = models.ForeignKey(User, related_name='user_savedissue', on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issue, related_name='issue_savedissue', on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+

@@ -1,6 +1,13 @@
 {% extends 'base.html'%}
 {% load material_form %}
 {% block content %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <div class="card-panel blue-grey lighten-5">
     <div class="row">
         <h1>{{ issue.title }}</h1>
@@ -25,6 +32,7 @@
             <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
             <p><b>Resolved: </b>{{ issue.is_resolved }}</p>
             {% if user == issue.author or user.is_staff %}
+            <a class="btn-floating btn-large waves-effect waves-light yellow" href="{% url 'save_issue' issue.id %}"><i class="material-icons">star</i></a>
             <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_issue' issue.id %}"><i class="material-icons">edit</i></a>
             {% endif %}
         </div>
@@ -47,24 +55,38 @@
 
         <!--<div class="col s12 m6">-->
             <h3>Comments</h3>
+            <a class="btn-floating btn waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
             {% for comment in comments %}
-            <div class="card-panel blue-grey lighten-5">
+            <div class="card-panel blue-grey lighten-4">
                 <div class="row">
                     <div class="col s12 m8">
                         <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
                         <p><b>Comment: </b>{{ comment.comment }}</p>
+                        <h5>Replies</h5>
+                        <a class="btn-floating btn-small waves-effect waves-light green" href="{% url 'new_reply' issue.id comment.id %}"><i class="material-icons left">add</i>Add New Reply</a>
+                        {% for replies in comment_replies %}
+                        {% for reply in replies %}
+                        {% if reply.comment == comment %}
+                        <div class="card-panel blue-grey lighten-3">
+                            <div class="row">
+                                <div class="col s12 m8">
+                                    <p><b>Created: </b>{{ reply.created_date }} <b>Updated: </b>{{ reply.updated_date }} <b>User: </b>{{ reply.author }}</p>
+                                    <p><b>Reply: </b>{{ reply.reply }}</p>
+                                </div>
+                                <div class="col s12 m4">
+                                    <a class="btn-floating btn-small waves-effect waves-light blue" href="{% url 'edit_reply' issue.id comment.id reply.id %}"><i class="material-icons left">edit</i>Edit Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
                     </div>
                     <div class="col s12 m4">
-                        <a class="btn-floating btn-large waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
+                        <a class="btn-floating btn waves-effect waves-light blue" href="{% url 'edit_comment' issue.id comment.id %}"><i class="material-icons left">edit</i>Edit Comment</a>
                     </div>
                 </div>
             </div>
-
             {% endfor %}
-            <a class="btn-floating btn-large waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
-            </div>
-        </div>
-
-
 </div>
 {% endblock %}

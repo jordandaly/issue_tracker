@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.conf import settings
 from django.contrib import messages
-from .models import Issue, Comment
-from .forms import IssueForm, CommentForm
+from .models import Issue, Comment, Reply, SavedIssue
+from .forms import IssueForm, CommentForm, ReplyForm
 from .filters import IssueFilter
 from django.http import JsonResponse
 from django.db.models import Count
@@ -53,6 +53,17 @@ def my_issues(request):
     user = request.user.id
     issues = Issue.objects.filter(author=user).order_by('-created_date')
     return render(request, "issues.html", {'issues': issues})
+
+
+@login_required()
+def saved_issues(request):
+    """
+    Create a view that will return a list
+    of current user's Saved Issues and render them to the 'issues.html' template
+    """
+    user = request.user.id
+    savedissues = SavedIssue.objects.filter(user=user).order_by('-created_date')
+    return render(request, "savedissues.html", {'savedissues': savedissues})
 
 
 def my_notifications(request):
@@ -142,7 +153,12 @@ def issue_detail(request, pk):
     issue = get_object_or_404(Issue, pk=pk)
     issue.save()
     comments = Comment.objects.filter(issue=pk)
-    return render(request, "issuedetail.html", {'issue': issue, 'comments': comments})
+    comment_replies = []
+    for comment in comments:
+        replies = Reply.objects.filter(comment=comment)
+        comment_replies.append(replies)
+
+    return render(request, "issuedetail.html", {'issue': issue, 'comments': comments, 'comment_replies': comment_replies})
 
 
 @login_required()
@@ -151,7 +167,31 @@ def upvote(request, pk):
     issue.upvotes += 1
     issue.save()
     notify.send(request.user, recipient=issue.author, verb="upvoted your Issue: " + issue.title)
+    messages.success(request, 'Issue upvoted!')
     return redirect('issue_detail', pk)
+
+@login_required()
+def save_issue(request, pk):
+    user = request.user
+    issue = Issue.objects.get(pk=pk)
+    try:
+        savedissue = SavedIssue.objects.get(issue=issue)
+    except SavedIssue.DoesNotExist:
+        savedissue = None
+    if savedissue is None:
+        savedissue = SavedIssue(user=user, issue=issue)
+        savedissue.save()
+        messages.success(request, 'Issue added to your Saved Issues!')
+    else:
+        messages.error(request, 'Issue already added in your Saved Issues!')
+    return redirect('issue_detail', pk)
+
+@login_required()
+def delete_saved_issue(request, pk):
+    savedissue = SavedIssue.objects.get(pk=pk)
+    savedissue.delete()
+    messages.success(request, 'Saved Issue deleted!')
+    return redirect('saved_issues')
 
 
 @login_required()
@@ -242,11 +282,36 @@ def create_or_edit_comment(request, issue_pk, pk=None):
         if form.is_valid():
             form.instance.author = request.user
             form.instance.issue = issue
-            comment = form.save()
+            form.save()
             notify.send(request.user, recipient=issue.author, verb="added a comment to your Issue: " + issue.title)
+            messages.success(request, 'Comment Saved!')
             return redirect(issue_detail, issue_pk)
     else:
         form = CommentForm(instance=comment)
     return render(request, 'commentform.html', {'form': form})
+
+
+@login_required()
+def create_or_edit_reply(request, issue_pk, comment_pk, pk=None):
+    """
+    Create a view that allows us to create
+    or edit a reply depending if the Reply ID
+    is null or not
+    """
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    reply = get_object_or_404(Reply, pk=pk) if pk else None
+    if request.method == "POST":
+        form = ReplyForm(request.POST, request.FILES, instance=reply)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.comment = comment
+            form.save()
+            notify.send(request.user, recipient=comment.author, verb="added a reply to your Comment: " + comment.comment)
+            messages.success(request, 'Reply Saved!')
+            return redirect(issue_detail, issue_pk)
+    else:
+        form = ReplyForm(instance=reply)
+    return render(request, 'replyform.html', {'form': form})
+
 
 

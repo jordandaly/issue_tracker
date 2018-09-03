@@ -38,6 +38,7 @@
               <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
               <ul class="right hide-on-med-and-down">
                 <li><a href="{% url 'my_issues' %}"><i class="material-icons left">list</i>My Issues</a></li>
+                <li><a href="{% url 'saved_issues' %}"><i class="material-icons left">star</i>Saved Issues</a></li>
                 <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
                 <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
                 <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>
@@ -47,6 +48,7 @@
         
           <ul class="sidenav" id="mobile-demo">
             <li><a href="{% url 'my_issues' %}"><i class="material-icons left">list</i>My Issues</a></li>
+            <li><a href="{% url 'saved_issues' %}"><i class="material-icons left">star</i>Saved Issues</a></li>
             <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
             <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
             <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>

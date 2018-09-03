@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+{% load notifications_tags %}
+{% block content %}
+<div class="row">
+    {% notifications_unread as unread_count %}
+    {% if unread_count %}
+        You have <strong>{{ unread_count }}</strong> unread notifications. <a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a>
+    {% endif %}
+    <h3>Saved Issues</h3>
+    <p>{{ issue_count }}</p>
+    <ul class="collapsible">
+    {% for savedissue in savedissues %}
+        <li>
+
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ savedissue.issue.title }}
+            <a href="{% url 'issue_detail' savedissue.issue.id %}"><i class="material-icons">navigate_next</i></a>
+            <a class="btn-floating btn-small waves-effect waves-light red" href="{% url 'delete_saved_issue' savedissue.id %}"><i class="material-icons">delete</i></a>
+        </div>
+        <div class="collapsible-body">
+            <p><span><b>Created: </b>{{ savedissue.issue.created_date }}</span></p>
+            <p><span><b>Tag: </b>{{ savedissue.issue.tag }}</span></p>
+            <p><span><b>Upvotes: </b>{{ savedissue.issue.upvotes }}</span></p>
+            <p><span><b>Status: </b>{{ savedissue.issue.status }}</span></p>
+            <p><span><b>Type: </b>{{ savedissue.issue.issue_type }}</span></p>
+            <p><span><b>Logged by: </b>{{ savedissue.issue.author }}</span></p>
+            <p><span><b>Assigned to: </b>{{ savedissue.issue.assignee }}</span></p>
+        </div>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
