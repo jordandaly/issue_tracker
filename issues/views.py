@@ -175,7 +175,7 @@ def save_issue(request, pk):
     user = request.user
     issue = Issue.objects.get(pk=pk)
     try:
-        savedissue = SavedIssue.objects.get(issue=issue)
+        savedissue = SavedIssue.objects.get(user=user, issue=issue)
     except SavedIssue.DoesNotExist:
         savedissue = None
     if savedissue is None:
