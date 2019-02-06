@@ -12,27 +12,27 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import dj_database_url
-# from os.path import join, dirname
-# from dotenv import load_dotenv
+from os.path import join, dirname
+from dotenv import load_dotenv
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# dotenv_path = join(dirname(__file__), '.env')
-# load_dotenv(dotenv_path)
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(dotenv_path)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','daly-issue-tracker.herokuapp.com']
 
@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'issuetracker.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 if "DATABASE_URL" in os.environ:
-    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL')) }
+    DATABASES = {'default': dj_database_url.parse(os.getenv('DATABASE_URL')) }
 else:
     print("Database URL not found. Using SQLite instead")
     DATABASES = {

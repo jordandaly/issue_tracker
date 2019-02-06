@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import get_issues, issue_detail, create_issue, edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_upvotes_json, report, upvote, my_issues, my_notifications, create_or_edit_reply, save_issue, saved_issues, delete_saved_issue
+from .views import get_issues, issue_detail, create_issue, edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_upvotes_json, report, upvote, my_issues, my_notifications, create_or_edit_reply, save_issue, saved_issues, delete_saved_issue, do_search, do_search_my
 
 
 urlpatterns = [
@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^(?P<issue_pk>\d+)/(?P<comment_pk>\d+)/new/$', create_or_edit_reply, name='new_reply'),
     url(r'^(?P<issue_pk>\d+)/(?P<comment_pk>\d+)/(?P<pk>\d+)/edit/$', create_or_edit_reply, name='edit_reply'),
     url(r'^search/$', search, name='search'),
+    url(r'^do_search/$', do_search, name='do_search'),
+    url(r'^do_search_my/$', do_search_my, name='do_search_my'),
     url(r'^report/get_issue_type_json/$', get_issue_type_json, name='get_issue_type_json'),
     url(r'^report/get_status_json/$', get_status_json, name='get_status_json'),
     url(r'^report/get_upvotes_json/$', get_upvotes_json, name='get_upvotes_json'),

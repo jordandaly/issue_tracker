@@ -6,9 +6,6 @@
         {% csrf_token %}
         {% form form=form %}{% endform %}
 
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-        <div class="g-recaptcha" data-sitekey="6LfacGgUAAAAAIRsxHcwkd8lgcsyodiqEDV3NZ5P"></div>
-
         <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'New Issue Submitted!'})">Save Issue
                 <i class="material-icons right">send</i>
               </button>

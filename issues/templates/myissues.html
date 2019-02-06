@@ -7,7 +7,7 @@
         You have <strong>{{ unread_count }}</strong> unread notifications. <a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a>
     {% endif %}
     <p>{{ issue_count }}</p>
-    <form action="{% url 'do_search' %}" method="get">
+    <form action="{% url 'do_search_my' %}" method="get">
         <input type="text" name="q">
         <button class="btn waves-effect waves-light"  type="submit"><i class="material-icons right">search</i>Search</button>
     </form>
