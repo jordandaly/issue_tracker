@@ -8,13 +8,14 @@
 
   <div class="row">
         <p>{{ issue_count }}</p>
-        <ul class="collapsible">
+        <ul class="collapsible popout">
         {% for issue in filter.qs %}
             <li>
                  
-            <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ issue.title }} <a href="{% url 'issue_detail' issue.id %}"><i class="material-icons">navigate_next</i></a>
+            <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ issue.title }}
             </div>
             <div class="collapsible-body">
+                <a class="btn-floating btn-large" href="{% url 'issue_detail' issue.id %}"><i class="material-icons">navigate_next</i></a>
                 <p><span><b>Created: </b>{{ issue.created_date }}</span></p>
                 <p><span><b>Tag: </b>{{ issue.tag }}</span></p>
                 <p><span><b>Upvotes: </b>{{ issue.upvotes }}</span></p>

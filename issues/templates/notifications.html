@@ -8,9 +8,9 @@
         You have <strong>{{ unread_count }}</strong> unread notifications.
     {% endif %}
     <div>
-    <ul>
+    <ul class="collection">
     {% for notification in notifications %}
-        <li>
+        <li class="collection-item">
             {{ notification }}
         </li>
     {% endfor %}

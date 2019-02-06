@@ -4,20 +4,22 @@
 <div class="row">
     {% notifications_unread as unread_count %}
     {% if unread_count %}
-        You have <strong>{{ unread_count }}</strong> unread notifications. <a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a>
+        <!-- You have <strong>{{ unread_count }}</strong> unread notifications. <a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a> -->
+        <p><a href="{% url 'my_notifications' %}"><span class="new badge red left">{{ unread_count }}</span></a> You have unread notifications.</p>
     {% endif %}
     <p>{{ issue_count }}</p>
     <form action="{% url 'do_search' %}" method="get">
         <input type="text" name="q">
         <button class="btn waves-effect waves-light"  type="submit"><i class="material-icons right">search</i>Search</button>
     </form>
-    <ul class="collapsible">
+    <ul class="collapsible popout">
     {% for issue in issues %}
         <li>
 
-        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ issue.title }} <a href="{% url 'issue_detail' issue.id %}"><i class="material-icons">navigate_next</i></a>
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ issue.title }}
         </div>
         <div class="collapsible-body">
+            <a class="btn-floating btn-large" href="{% url 'issue_detail' issue.id %}"><i class="material-icons">navigate_next</i></a>
             <p><span><b>Created: </b>{{ issue.created_date }}</span></p>
             <p><span><b>Tag: </b>{{ issue.tag }}</span></p>
             <p><span><b>Upvotes: </b>{{ issue.upvotes }}</span></p>
@@ -32,9 +34,9 @@
     {% if issues.has_other_pages %}
         <ul class="pagination">
             {% if issues.has_previous %}
-                <li><a href="?page={{ issues.previous_page_number }}">&laquo;</a></li>
+                <li><a href="?page={{ issues.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
             {% else %}
-                <li class="disabled"><span>&laquo;</span></li>
+                <li class="disabled"><i class="material-icons">chevron_left</i></li>
             {% endif %} 
             
             {% for i in issues.paginator.page_range %} 
@@ -46,9 +48,9 @@
             {% endfor %} 
             
             {% if issues.has_next %}
-                <li><a href="?page={{ issues.next_page_number }}">&raquo;</a></li>
+                <li><a href="?page={{ issues.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
             {% else %}
-                <li class="disabled"><span>&raquo;</span></li>
+                <li class="disabled"><i class="material-icons">chevron_right</i></li>
             {% endif %}
         </ul>
         {% endif %} 

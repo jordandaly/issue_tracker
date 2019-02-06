@@ -8,15 +8,14 @@
     {% endif %}
     <h3>Saved Issues</h3>
     <p>{{ issue_count }}</p>
-    <ul class="collapsible">
+    <ul class="collapsible popout">
     {% for savedissue in savedissues %}
         <li>
 
-        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ savedissue.issue.title }}
-            <a href="{% url 'issue_detail' savedissue.issue.id %}"><i class="material-icons">navigate_next</i></a>
-            <a class="btn-floating btn-small waves-effect waves-light red" href="{% url 'delete_saved_issue' savedissue.id %}"><i class="material-icons">delete</i></a>
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ savedissue.issue.title }} <a class="btn-floating btn-small waves-effect waves-light red" href="{% url 'delete_saved_issue' savedissue.id %}"><i class="material-icons">delete</i></a>
         </div>
         <div class="collapsible-body">
+                <a class="btn-floating btn-large" href="{% url 'issue_detail' savedissue.id %}"><i class="material-icons">navigate_next</i></a>
             <p><span><b>Created: </b>{{ savedissue.issue.created_date }}</span></p>
             <p><span><b>Tag: </b>{{ savedissue.issue.tag }}</span></p>
             <p><span><b>Upvotes: </b>{{ savedissue.issue.upvotes }}</span></p>

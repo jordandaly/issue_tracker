@@ -56,17 +56,18 @@
     </header>
     <div class="container">
             <div>
-                    <ul>
+                    <ul class="tabs">
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'profile' %}">Profile</a></li>
-                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                            <li class="tab col s3"><a href="{% url 'profile' %}"><i class="material-icons">person</i>Profile</a></li>
+                            <li class="tab col s3"><a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a></li>
+                            <li class="tab col s3"><a href="{% url 'logout' %}">Log Out</a></li>
                         {%  else %}
-                            <li><a href="{% url 'register' %}">Register</a></li>
-                            <li><a href="{% url 'login' %}">Log In</a></li>
+                            <li class="tab col s3"><a href="{% url 'register' %}">Register</a></li>
+                            <li class="tab col s3"><a href="{% url 'login' %}">Log In</a></li>
                         {% endif %}
-                        <li>
+                        <li class="tab col s3">
                             <a href="{% url 'view_cart' %}">
-                                <span>Cart</span>
+                                <i class="material-icons">shopping_cart</i><span>Cart</span>
                                 {% if issue_upvote_count > 0 %}
                                 <label>{{ issue_upvote_count }}</label>
                                 {% endif %}
