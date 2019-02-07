@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .views import get_issues, issue_detail, create_issue, edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_upvotes_json, report, upvote, my_issues, my_notifications, create_or_edit_reply, save_issue, saved_issues, delete_saved_issue, do_search, do_search_my
+from .views import get_issues, issue_detail, create_issue, edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_bug_upvotes_json, get_feature_upvotes_json, report, upvote, my_issues, my_notifications, create_or_edit_reply, save_issue, saved_issues, delete_saved_issue, do_search, do_search_my
 
 
 urlpatterns = [
@@ -19,7 +19,8 @@ urlpatterns = [
     url(r'^do_search_my/$', do_search_my, name='do_search_my'),
     url(r'^report/get_issue_type_json/$', get_issue_type_json, name='get_issue_type_json'),
     url(r'^report/get_status_json/$', get_status_json, name='get_status_json'),
-    url(r'^report/get_upvotes_json/$', get_upvotes_json, name='get_upvotes_json'),
+    url(r'^report/get_bug_upvotes_json/$', get_bug_upvotes_json, name='get_bug_upvotes_json'),
+    url(r'^report/get_feature_upvotes_json/$', get_feature_upvotes_json, name='get_feature_upvotes_json'),
     url(r'^report/$', report, name='report'),
     url(r'^(?P<pk>\d+)/upvote/$', upvote, name='upvote'),
     url(r'^(?P<pk>\d+)/save_issue/$', save_issue, name='save_issue'),

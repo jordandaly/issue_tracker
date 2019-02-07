@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.core import serializers
 from .models import Issue, Comment, Reply, SavedIssue
 from .forms import IssueForm, CommentForm, ReplyForm
@@ -150,16 +150,34 @@ def get_status_json(request):
 
     return JsonResponse(chart)
 
-
-def get_upvotes_json(request):
+def get_bug_upvotes_json(request):
     dataset = Issue.objects \
+        .filter(issue_type='BUG') \
         .values('upvotes', 'title') \
+        .exclude(upvotes=0) \
         .order_by('upvotes')
 
     chart = {
-        'chart': {'type': 'bar'},
-        'title': {'text': 'Issue Upvotes'},
-        'yAxis': {'type': "category"},
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Top Bug Upvotes'},
+        'series': [{
+            'name': 'Issue Upvotes',
+            'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+def get_feature_upvotes_json(request):
+    dataset = Issue.objects \
+    .filter(issue_type='FEATURE') \
+    .values('upvotes', 'title') \
+    .exclude(upvotes=0) \
+    .order_by('upvotes')
+
+    chart = {
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Top Feature Upvotes'},
         'series': [{
             'name': 'Issue Upvotes',
             'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
