@@ -1,6 +1,13 @@
 {% extends 'base.html'%}
 {% load notifications_tags %}
 {% block content %}
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
 <div class="row">
     {% notifications_unread as unread_count %}
     {% if unread_count %}

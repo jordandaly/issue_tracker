@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .views import get_issues, issue_detail, create_issue, edit_issue, create_or_edit_comment, search, get_issue_type_json, get_status_json, get_bug_upvotes_json, get_feature_upvotes_json, report, upvote, my_issues, my_notifications, create_or_edit_reply, save_issue, saved_issues, delete_saved_issue, do_search, do_search_my
 
 
+
 urlpatterns = [
     url(r'^my_issues$', my_issues, name='my_issues'),
     url(r'^saved_issues', saved_issues, name='saved_issues'),
