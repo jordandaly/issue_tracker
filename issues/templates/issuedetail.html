@@ -20,13 +20,17 @@
             <p><b>Updated: </b>{{ issue.updated_date }}</p>
             <p><b>Tag: </b>{{ issue.tag }}</p>
             <p><b>Status: </b>{{ issue.status }}</p>
-            <p><b>Type: </b>{{ issue.issue_type }}</p>
+            {% if issue.issue_type == "BUG" %}
+            <p><b>Type: </b><i class="material-icons">bug_report</i> {{ issue.issue_type }}</p>
+            {% else %}
+            <p><b>Type: </b><i class="material-icons">lightbulb_outline</i> {{ issue.issue_type }}</p>
+            {% endif %}
             <p><b>Logged by: </b>{{ issue.author }}</p>
         </div>
         <div class="col s12 m6">
             <p><b>Upvotes: </b>{{ issue.upvotes }}
                 {% if issue.issue_type == "BUG" %}
-                <a class="btn-floating btn-small waves-effect waves-light teal" href="{% url 'upvote' issue.id %}"><i class="material-icons">arrow_upward</i></a>
+                <a class="btn-floating btn-small waves-effect waves-light teal" href="{% url 'upvote' issue.id %}"><i class="material-icons">thumb_up</i></a>
                 {% endif %}</p>
             <p><b>Assigned to: </b>{{ issue.assignee }}</p>
             <p><b>Resolved Date: </b>{{ issue.resolved_date }}</p>
@@ -54,15 +58,15 @@
     
 
         <!--<div class="col s12 m6">-->
-            <h3>Comments</h3>
+            <h3>Comments <i class="material-icons">comment</i></h3>
             <a class="btn-floating btn waves-effect waves-light green" href="{% url 'new_comment' issue.id %}"><i class="material-icons left">add</i>Add New Comment</a>
             {% for comment in comments %}
             <div class="card-panel blue-grey lighten-4">
                 <div class="row">
                     <div class="col s12 m8">
-                        <p><b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }} <b>User: </b>{{ comment.author }}</p>
-                        <p><b>Comment: </b>{{ comment.comment }}</p>
-                        <h5>Replies</h5>
+                        <p><b>User: </b>{{ comment.author }} <b>Created: </b>{{ comment.created_date }} <b>Updated: </b>{{ comment.updated_date }}</p>
+                        <p><h6><b>Comment: </b>{{ comment.comment }}</p></h6>
+                        <h4>Replies</h4>
                         <a class="btn-floating btn-small waves-effect waves-light green" href="{% url 'new_reply' issue.id comment.id %}"><i class="material-icons left">add</i>Add New Reply</a>
                         {% for replies in comment_replies %}
                         {% for reply in replies %}

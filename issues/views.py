@@ -1,17 +1,18 @@
+import os
+import requests
+from datetime import datetime, timedelta, time
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.conf import settings
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
+from django.db.models import Count, Q
+from django.core import serializers
 from .models import Issue, Comment, Reply, SavedIssue
 from .forms import IssueForm, CommentForm, ReplyForm
 from .filters import IssueFilter
-from django.http import JsonResponse
-from django.db.models import Count
-from django.core import serializers
-import os
-import requests
-from datetime import datetime, timedelta, time
 from notifications.signals import notify
 from notifications.models import Notification
 
@@ -40,19 +41,53 @@ def get_issues(request):
     of Issues render them to the 'issues.html' template
     """
     
-    issues = Issue.objects.all().order_by('-created_date')
+    issue_list = Issue.objects.all().order_by('-created_date')
+
+    # Pagination settings
+    page = request.GET.get('page', 1)
+    paginator = Paginator(issue_list, 10)
+    
+    try:
+        issues = paginator.page(page)
+        
+    except PageNotAnInteger:
+        
+        issues = paginator.page(1)
+        
+    except EmptyPage:
+        
+        issues = paginator.page(paginator.num_pages)
+
     return render(request, "issues.html", {'issues': issues})
+
+
+def do_search(request):
+    """
+    Create a view for searching all issues by keyword search on Issue.Title to return a list
+    of matching Issues and render them to the 'issues.html' template
+    """
+    issues = Issue.objects.filter(title__icontains=request.GET['q'])
+    return render(request, "issues.html", {"issues": issues})
+
+def do_search_my(request):
+    """
+    Create a view for searching my issues by keyword search on Issue.Title to return a list
+    of matching Issues and render them to the 'myissues.html' template
+    """
+    user = request.user.id
+    issues = Issue.objects.filter(author=user).filter(title__icontains=request.GET['q'])
+    return render(request, "myissues.html", {"issues": issues})
 
 
 @login_required()
 def my_issues(request):
     """
     Create a view that will return a list
-    of current user's Issues and render them to the 'issues.html' template
+    of current user's Issues and render them to the 'myissues.html' template
     """
     user = request.user.id
     issues = Issue.objects.filter(author=user).order_by('-created_date')
-    return render(request, "issues.html", {'issues': issues})
+    return render(request, "myissues.html", {'issues': issues})
 
 
 @login_required()
@@ -115,16 +150,34 @@ def get_status_json(request):
 
     return JsonResponse(chart)
 
-
-def get_upvotes_json(request):
+def get_bug_upvotes_json(request):
     dataset = Issue.objects \
+        .filter(issue_type='BUG') \
         .values('upvotes', 'title') \
+        .exclude(upvotes=0) \
         .order_by('upvotes')
 
     chart = {
-        'chart': {'type': 'bar'},
-        'title': {'text': 'Issue Upvotes'},
-        'yAxis': {'type': "category"},
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Top Bug Upvotes'},
+        'series': [{
+            'name': 'Issue Upvotes',
+            'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
+        }]
+    }
+
+    return JsonResponse(chart)
+
+def get_feature_upvotes_json(request):
+    dataset = Issue.objects \
+    .filter(issue_type='FEATURE') \
+    .values('upvotes', 'title') \
+    .exclude(upvotes=0) \
+    .order_by('upvotes')
+
+    chart = {
+        'chart': {'type': 'pie'},
+        'title': {'text': 'Top Feature Upvotes'},
         'series': [{
             'name': 'Issue Upvotes',
             'data': list(map(lambda row: {'name': [row['title']], 'y': row['upvotes']}, dataset))
@@ -204,27 +257,12 @@ def create_issue(request):
         form = IssueForm(request.POST, request.FILES)
         if form.is_valid():
             
-            ''' Begin reCAPTCHA validation '''
-            recaptcha_response = request.POST.get('g-recaptcha-response')
-        
-            data = {
-                'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_response
-            }
-            r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
-            result = r.json()
-            ''' End reCAPTCHA validation '''
-
-            if result['success']:
-                form.instance.author = request.user
-                if form.instance.issue_type == 'FEATURE':
-                    form.instance.price = 100
-                else:
-                    form.instance.price = 0
-                issue = form.save()
-                messages.success(request, 'New Issue added with success!')
+            form.instance.author = request.user
+            if form.instance.issue_type == 'FEATURE':
+                form.instance.price = 100
             else:
-                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+                form.instance.price = 0
+            issue = form.save()
             
             return redirect(issue_detail, issue.pk)
     else:

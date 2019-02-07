@@ -10,15 +10,7 @@
     <!--Import materialize.css-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/materialize.min.css' %}"  media="screen,projection"/>
     {% include 'material/includes/material_css.html' %}
-    <!--<link type="text/css" rel="stylesheet" href="{% static 'css/dc.min.css' %}"  media="screen,projection"/>-->
     <link type="text/css" rel="stylesheet" href="{% static 'css/custom.css' %}"/>
-    
-
-    <!--<script type="text/javascript" src="{% static 'js/d3.min.js' %}"></script>-->
-    <!--<script type="text/javascript" src="{% static 'js/crossfilter.min.js' %}"></script>-->
-    <!--<script type="text/javascript" src="{% static 'js/dc.min.js' %}"></script>-->
-    <!--<script type="text/javascript" src="{% static 'js/d3-queue.min.js' %}"></script>-->
-    <!--<script src="{% static 'js/graph.js' %}"></script>-->
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
@@ -40,7 +32,7 @@
                 <li><a href="{% url 'my_issues' %}"><i class="material-icons left">list</i>My Issues</a></li>
                 <li><a href="{% url 'saved_issues' %}"><i class="material-icons left">star</i>Saved Issues</a></li>
                 <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
-                <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
+                <li><a href="{% url 'search' %}"><i class="material-icons left">filter_list</i>Filter Issues</a></li>
                 <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>
               </ul>
             </div>
@@ -50,23 +42,24 @@
             <li><a href="{% url 'my_issues' %}"><i class="material-icons left">list</i>My Issues</a></li>
             <li><a href="{% url 'saved_issues' %}"><i class="material-icons left">star</i>Saved Issues</a></li>
             <li><a href="{% url 'new_issue' %}"><i class="material-icons left">add</i>Add New Issue</a></li>
-            <li><a href="{% url 'search' %}"><i class="material-icons left">search</i>Filter Issues</a></li>
+            <li><a href="{% url 'search' %}"><i class="material-icons left">filter_list</i>Filter Issues</a></li>
             <li><a href="{% url 'report' %}"><i class="material-icons left">dashboard</i>Issues Dashboard</a></li>
           </ul>
     </header>
     <div class="container">
             <div>
-                    <ul>
+                    <ul class="tabs">
                         {% if user.is_authenticated %}
-                            <li><a href="{% url 'profile' %}">Profile</a></li>
-                            <li><a href="{% url 'logout' %}">Log Out</a></li>
+                            <li class="tab col s3"><a href="{% url 'profile' %}"><i class="material-icons">person</i>Profile</a></li>
+                            <li class="tab col s3"><a href="{% url 'my_notifications' %}"><i class="material-icons">notifications</i>My Updates</a></li>
+                            <li class="tab col s3"><a href="{% url 'logout' %}">Log Out</a></li>
                         {%  else %}
-                            <li><a href="{% url 'register' %}">Register</a></li>
-                            <li><a href="{% url 'login' %}">Log In</a></li>
+                            <li class="tab col s3"><a href="{% url 'register' %}">Register</a></li>
+                            <li class="tab col s3"><a href="{% url 'login' %}">Log In</a></li>
                         {% endif %}
-                        <li>
+                        <li class="tab col s3">
                             <a href="{% url 'view_cart' %}">
-                                <span>Cart</span>
+                                <i class="material-icons">shopping_cart</i><span>Cart</span>
                                 {% if issue_upvote_count > 0 %}
                                 <label>{{ issue_upvote_count }}</label>
                                 {% endif %}

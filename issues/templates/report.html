@@ -8,10 +8,13 @@
             <div id="completed_weekly_container" class="col s12 m4"></div>
             <div id="completed_monthly_container" class="col s12 m4"></div>
         </div>
+        <div class="row">
+            <div id="bug_upvotes_container" class="col s12 m6" data-url="{% url 'get_bug_upvotes_json' %}"></div>
+            <div id="feature_upvotes_container" class="col s12 m6" data-url="{% url 'get_feature_upvotes_json' %}"></div>
+        </div>
 
         <div id="issue_type_container" data-url="{% url 'get_issue_type_json' %}"></div>
         <div id="status_container" data-url="{% url 'get_status_json' %}"></div>
-        <div id="upvotes_container" data-url="{% url 'get_upvotes_json' %}"></div>
 
       <script>
         $.ajax({
@@ -29,10 +32,17 @@
           }
         });
         $.ajax({
-          url: $("#upvotes_container").attr("data-url"),
+          url: $("#bug_upvotes_container").attr("data-url"),
           dataType: 'json',
           success: function (data) {
-            Highcharts.chart("upvotes_container", data);
+            Highcharts.chart("bug_upvotes_container", data);
+          }
+        });
+        $.ajax({
+          url: $("#feature_upvotes_container").attr("data-url"),
+          dataType: 'json',
+          success: function (data) {
+            Highcharts.chart("feature_upvotes_container", data);
           }
         });
         $(document).ready(function() {

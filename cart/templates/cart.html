@@ -3,29 +3,28 @@
 {% load material_form %}
 {% block content %}
 <div class="row">
+    <h1>Shopping Cart</h1>
+    {% if cart_items %}
+    Number of items in cart: {{ cart_items|length }}
     {% for item in cart_items %}
     
     <div>
-        
-        <div></div>
-        
-        <div class="caption">
+        <div>
             <h3>{{ item.issue.title }}</h3>
             <p class="issue-description">{{ item.issue.description }}</p>
-            <p>{{ item.issue.price }}</p>
-            <p>
+            <p> Price: {{ item.issue.price }}</p>
                 
                 <form class="form-inline" method="post" action="{% url 'adjust_cart' item.id %}">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="exampleInputAmount" class="sr-only">New Qty</label>
                         <div class="input-group">
-                            <div>Qty</div>
+                            <div>Quantity of Upvotes to purchase for this Feature</div>
                             <input name="quantity" type="number" min="0" max="999" class="form-control">
                             <div>{{item.quantity}}</div>
                         </div>
                     </div>
-                    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Cart Amended!'})">Amend
+                    <button class="btn-small waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'Cart Amended!'})">Amend
                 </form>
             </p>
         </div>
@@ -35,7 +34,11 @@
 <div class="row">
     <p>Total</p>
     <p><span aria-hidden="true"></span>{{ total }}</p>
-    <a href="{% url 'checkout' %}" role="button"><span aria-hidden="true"></span>Checkout</a>
+    <button class="btn-large waves-effect waves-light" ><a href="{% url 'checkout' %}">Checkout</a></button>
 </div>
+    {% else %}
+    <p>No items in cart.</p>
+    {% endif %}
+
 
 {% endblock %}

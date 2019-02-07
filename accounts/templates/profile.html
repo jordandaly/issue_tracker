@@ -1,11 +1,41 @@
 {% extends "base.html" %}
 {% block content %}
     <h2>User Profile</h2>
-    <p>You are logged in as: </p>
-    <p>Username: {{ user.username }}</p>
-    <p>Email: {{ user.email }}</p>
-    <p>is_staff: {{ user.is_staff }}</p>
-    <p>is_active: {{ user.is_active }}</p>
-    <p>last_login: {{ user.last_login }}</p>
-    <p>date_joined: {{ user.date_joined }}</p>
+    <p>You are logged in as:</p>
+    
+    <table class="highlight">
+        <thead>
+          <tr>
+              <th>User Attribute</th>
+              <th>Value</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><p>Username:</p></td>
+            <td><p> {{ user.username }}</p></td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>{{ user.email }}</td>
+          </tr>
+          <tr>
+            <td>Is Staff:</td>
+            <td>{{ user.is_staff }}</td>
+          </tr>
+          <tr>
+            <td>Is Active:</td>
+            <td>{{ user.is_active }}</td>
+          </tr>
+          <tr>
+            <td>Last login:</td>
+            <td>{{ user.last_login }}</td>
+          </tr>
+          <tr>
+            <td>Date joined:</td>
+            <td>{{ user.date_joined }}</td>
+          </tr>
+        </tbody>
+      </table>
 {% endblock %}

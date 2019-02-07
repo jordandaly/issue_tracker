@@ -30,8 +30,8 @@ class Issue(models.Model):
         DOING = 'doing'
         DONE = 'done'
 
-    issue_type = models.CharField(max_length=9, choices=Issue_Types.choices(), default='bug')
-    status = models.CharField(max_length=7, choices=Statuses.choices(), default='todo')
+    issue_type = models.CharField(max_length=9, choices=Issue_Types.choices(), default='BUG')
+    status = models.CharField(max_length=7, choices=Statuses.choices(), default='TODO')
 
 
     def __unicode__(self):
